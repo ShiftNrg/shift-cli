@@ -1,5 +1,6 @@
 var inquirer = require("inquirer");
 var program = require("commander");
+var bip39 = require("bip39");
 var accountHelper = require("./helpers/account.js");
 var blockHelper = require("./helpers/block.js");
 var dappHelper = require("./helpers/dapp.js");
@@ -139,7 +140,7 @@ program
 								{
 									type: "input",
 									name: "link",
-									message: "Enter App link, e.g. https://github.com/user/coolapp/archive/master.zip",
+									message: "Enter App zip link",
 									required: true,
 									default: function () { return defaultLink },
 									validate: function (value) {
@@ -311,7 +312,7 @@ program
 																		{
 																			type: "confirm",
 																			name: "confirmed",
-																			message: "Add dapp to autolaunch?"
+																			message: "Add App to autolaunch?"
 																		}
 																	], function (result) {
 																		if (result.confirmed) {
@@ -401,11 +402,13 @@ program
 								{
 									type: "confirm",
 									name: "confirmed",
-									message: "Continue with exists forgers public keys",
+									message: "Continue with existing forgers public keys",
 									required: true,
 								}], function (result) {
 								if (result.confirmed) {
-									publicKeys = dappGenesis.delegates;
+									publicKeys = dappGenesis.delegate;
+								} else {
+									publicKeys = account.keypair.publicKey;
 								}
 
 								inquirer.prompt([
@@ -413,7 +416,7 @@ program
 										type: "input",
 										name: "publicKeys",
 										message: "Enter public keys of app forgers - hex array, use ',' for separator",
-										default: account.keypair.publicKey,
+										default: publicKeys,
 										validate: function (value) {
 											var done = this.async();
 
@@ -737,7 +740,7 @@ program
 				{
 					type: "password",
 					name: "secret",
-					message: "Enter secret of your testnet account",
+					message: "Enter secret of your account",
 					validate: function (value) {
 						var done = this.async();
 
@@ -774,7 +777,7 @@ program
 					accounts = [];
 
 				for (var i = 0; i < n; i++) {
-					var a = accountHelper.account(cryptoLib.randomString(32));
+					var a = accountHelper.account(bip39.generateMnemonic());
 					accounts.push({
 						address: a.address,
 						secret: a.secret,
