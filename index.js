@@ -12,9 +12,9 @@ var npm = require("npm");
 var request = require("request");
 var valid_url = require("valid-url");
 
-var sdk = "git@github.com:LiskHQ/lisk-dapps-sdk.git";
+var sdk = "git@github.com:ShiftNrg/shift-apps-sdk.git";
 
-program.version("1.1.3");
+program.version("1.1.6");
 
 program
 	.command("dapps")
@@ -83,18 +83,18 @@ program
 								{
 									type: "input",
 									name: "name",
-									message: "Enter DApp name",
+									message: "Enter App name",
 									required: true,
 									validate: function (value) {
 										var done = this.async();
 
 										if (value.length == 0) {
-											done("DApp name is too short, minimum is 1 character");
+											done("App name is too short, minimum is 1 character");
 											return;
 										}
 
 										if (value.length > 32) {
-											done("DApp name is too long, maximum is 32 characters");
+											done("App name is too long, maximum is 32 characters");
 											return;
 										}
 
@@ -104,12 +104,12 @@ program
 								{
 									type: "input",
 									name: "description",
-									message: "Enter DApp description",
+									message: "Enter App description",
 									validate: function (value) {
 										var done = this.async();
 
 										if (value.length > 160) {
-											done("DApp description is too long, maximum is 160 characters");
+											done("App description is too long, maximum is 160 characters");
 											return;
 										}
 
@@ -139,17 +139,17 @@ program
 								{
 									type: "input",
 									name: "link",
-									message: "Enter DApp link",
+									message: "Enter App link, e.g. https://github.com/user/coolapp/archive/master.zip",
 									required: true,
 									default: function () { return defaultLink },
 									validate: function (value) {
 										var done = this.async();
 
 										if (!valid_url.isUri(value)) {
-											done("Invalid DApp link, must be a valid url");
+											done("Invalid App link, must be a valid url");
 											return;
 										} else if (!/^.*\.zip$/i.test(value)){
-											done("Invalid DApp link, does not link to zip file");
+											done("Invalid App link, does not link to zip file");
 											return;
 										}
 
@@ -199,7 +199,7 @@ program
 										{
 											type: "input",
 											name: "publicKeys",
-											message: "Enter public keys of dapp forgers - hex array, use ',' for separator",
+											message: "Enter public keys of app forgers - hex array, use ',' for separator",
 											default: account.keypair.publicKey,
 											validate: function (value) {
 												var done = this.async();
@@ -207,7 +207,7 @@ program
 												var publicKeys = value.split(",");
 
 												if (publicKeys.length == 0) {
-													done("DApp requires at least 1 public key");
+													done("App requires at least 1 public key");
 													return;
 												}
 
@@ -228,10 +228,10 @@ program
 											}
 										}
 									], function (result) {
-										console.log("Creating DApp genesis block");
+										console.log("Creating App genesis block");
 										var dappBlock = dappHelper.new(account, block, result.publicKeys.split(","));
 
-										console.log("Fetching Lisk Dapps SDK");
+										console.log("Fetching Shift Apps SDK");
 										var dappsPath = path.join(".", "dapps");
 										fs.exists(dappsPath, function (exists) {
 											if (!exists) {
@@ -264,7 +264,7 @@ program
 														try {
 															packageJson = JSON.parse(fs.readFileSync(path.join(dappPath, "package.json")));
 														} catch (e) {
-															return setImmediate(cb, "Invalid package.json file for " + dApp.transactionId + " DApp");
+															return setImmediate(cb, "Invalid package.json file for " + dApp.transactionId + " App");
 														}
 
 														npm.load(packageJson, function (err) {
@@ -330,7 +330,7 @@ program
 																			if (err) {
 																				console.log(err);
 																			} else {
-																				console.log("Done (DApp id is " + dapp.id + ")");
+																				console.log("Done (App id is " + dapp.id + ")");
 																			}
 																		});
 																	});
@@ -387,7 +387,7 @@ program
 							{
 								type: "input",
 								name: "dappId",
-								message: "Enter DApp id (folder name of dapp)",
+								message: "Enter App id (folder name of app)",
 								required: true
 							},
 						], function (result) {
@@ -412,7 +412,7 @@ program
 									{
 										type: "input",
 										name: "publicKeys",
-										message: "Enter public keys of dapp forgers - hex array, use ',' for separator",
+										message: "Enter public keys of app forgers - hex array, use ',' for separator",
 										default: account.keypair.publicKey,
 										validate: function (value) {
 											var done = this.async();
@@ -420,7 +420,7 @@ program
 											var publicKeys = value.split(",");
 
 											if (publicKeys.length == 0) {
-												done("DApp requires at least 1 public key");
+												done("App requires at least 1 public key");
 												return;
 											}
 
@@ -441,7 +441,7 @@ program
 										}
 									}
 								], function (result) {
-									console.log("Creating DApp genesis block");
+									console.log("Creating App genesis block");
 
 									var dappBlock = dappHelper.new(account, dappGenesis, result.publicKeys.split(","));
 									var dappGenesisBlockJson = JSON.stringify(dappBlock, null, 4);
@@ -572,7 +572,7 @@ program
 				};
 
 				request({
-					url: "http://localhost:7000/api/dapps/" + result.dappId + "/api/withdrawal",
+					url: "http://localhost:9305/api/dapps/" + result.dappId + "/api/withdrawal",
 					method: "post",
 					json: true,
 					body: body
