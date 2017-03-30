@@ -1,11 +1,11 @@
-# Lisk CLI
+# Shift CLI
 
-A command line interface for bootstrapping and managing [Lisk](https://lisk.io/) blockchain apps.
+A command line interface for bootstrapping and managing [Shift](https://www.shiftnrg.org/) blockchain apps.
 
 ## Installation:
 
 ```
-npm install -g lisk-cli
+npm install -g shift-cli
 ```
 
 ## Apps
@@ -13,19 +13,19 @@ npm install -g lisk-cli
 ### Add app
 
 ```
-lisk-cli dapps -a
+shift-cli dapps -a
 ```
 
 ### Deposit
 
 ```
-lisk-cli dapps -d
+shift-cli dapps -d
 ```
 
 ### Withdraw
 
 ```
-lisk-cli dapps -w
+shift-cli dapps -w
 ```
 
 ## Contracts
@@ -33,13 +33,13 @@ lisk-cli dapps -w
 ### Add contract
 
 ```
-lisk-cli contract -a
+shift-cli contract -a
 ```
 
 ### Delete contract
 
 ```
-lisk-cli contract -d
+shift-cli contract -d
 ```
 
 ## Crypto
@@ -47,19 +47,19 @@ lisk-cli contract -d
 ### Generate public key
 
 ```
-lisk-cli crypto -p
+shift-cli crypto -p
 ```
 
 ### Generate accounts
 
 ```
-lisk-cli crypto -g
+shift-cli crypto -g
 ```
 
 ### Help
 
 ```
-lisk-cli -h
+shift-cli -h
 ```
 
 ## Authors
@@ -67,12 +67,14 @@ lisk-cli -h
 - Boris Povod <boris@crypti.me>
 - Pavel Nekrasov <landgraf.paul@gmail.com>
 - Oliver Beddows <oliver@lisk.io>
+- GoldenEye (Shift Team)
 
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2016 Lisk  
+Copyright (c) 2017 Shift
+Copyright (c) 2016 Lisk
 Copyright (c) 2015 Crypti
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
