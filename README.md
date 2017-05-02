@@ -5,7 +5,7 @@ A command line interface for bootstrapping and managing [Shift](https://www.shif
 ## Installation:
 
 ```
-npm install -g shift-cli
+sudo npm install -g
 ```
 
 ## Apps
