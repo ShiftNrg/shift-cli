@@ -125,13 +125,17 @@ program
 									validate: function (value) {
 										var done = this.async();
 
-										var match = /^(https\:\/\/github\.com\/|git\@github\.com\:)(.*)\/(.*)\.git$/i.exec(value);
-										if (!match) {
-											done("Invalid Github repository");
+										var match1 = /^(https\:\/\/github\.com\/|git\@github\.com\:)(.*)\/(.*)\.git$/i.exec(value);
+										var match2 = /^(https\:\/\/bitbucket\.org\/|git\@bitbucket\.org\:)(.*)\/(.*)\.git$/i.exec(value);
+										if (!match1 && !match2) {
+											done("Invalid Github/Bitbucket repository");
 											return;
 										} else {
 											// Default zip link from repo
-											defaultLink = "https://github.com/"+match[2]+"/"+match[3]+"/archive/master.zip";
+											if (match1)
+												defaultLink = "https://github.com/"+match1[2]+"/"+match1[3]+"/archive/master.zip";
+											else
+												defaultLink = "https://bitbucket.org/"+match2[2]+"/"+match2[3]+"/get/master.zip";
 										}
 
 										return done(true);
