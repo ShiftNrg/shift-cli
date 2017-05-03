@@ -74,7 +74,7 @@ program
 								try {
 									genesisBlock = JSON.parse(fs.readFileSync(path.join(".", "genesisBlock.json"), "utf8"));
 								} catch (e) {
-									console.log("Failed to read genesisBlock.js: ", e.toString());
+									console.log("Failed to read genesisBlock.json: ", e.toString());
 									return;
 								}
 							}
@@ -160,6 +160,21 @@ program
 
 										return done(true);
 									}
+								},
+								{
+									type: "input",
+									name: "icon",
+									message: "Enter icon link",
+									required: true,
+									default: function () { return '' },
+										validate: function (value) {
+											var done = this.async();
+											if (value.length>0 && !valid_url.isUri(value)) {
+												done("Invalid icon link, must be a valid url");
+												return;
+											}
+											return done(true);
+										}
 								}
 							], function (result) {
 								console.log("Generating unique genesis block...");
@@ -173,6 +188,7 @@ program
 											description: result.description,
 											link: result.link,
 											git: result.git,
+											icon: result.icon,
 											type: 0,
 											category: 0
 										}
@@ -189,6 +205,7 @@ program
 												description: result.description,
 												link: result.link,
 												git: result.git,
+												icon: result.icon,
 												type: 0,
 												category: 0
 											}
