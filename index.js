@@ -755,6 +755,7 @@ program
 	.description("crypto operations")
 	.option("-p, --pubkey", "generate public key from secret")
 	.option("-g, --generate", "generate random accounts")
+	.option("-b, --genesis", "generate new genesis.json")
 	.action(function (options) {
 		if (options.pubkey) {
 			inquirer.prompt([
@@ -809,7 +810,80 @@ program
 				console.log(accounts);
 				console.log("Done");
 			});
-		} else {
+		} else if (options.genesis) {
+			inquirer.prompt([
+				{
+					type: "confirm",
+					name: "confirmed",
+					message: "Existing blockchain will be replaced, are you sure?",
+					default: false
+				}
+				], function (result) {
+					if (result.confirmed) {
+						inquirer.prompt([
+						{
+							type: "password",
+							name: "secret",
+							message: "Enter secret of your testnet account",
+							validate: function (value) {
+								var done = this.async();
+
+								if (value.length == 0) {
+									done("Secret is too short, minimum is 1 character");
+									return;
+								}
+
+								if (value.length > 100) {
+									done("Secret is too long, maximum is 100 characters");
+									return;
+								}
+
+								done(true);
+							}
+						}
+						], function (result) {
+							var account = accountHelper.account(result.secret);
+							var genesisBlock = null;
+
+							console.log("Generating unique genesis block...");
+
+							var r = blockHelper.new(account);
+							var block = r.block;
+							var delegates = r.delegates;
+
+							console.log("Saving genesis block");
+							var genesisBlockJson = JSON.stringify(block, null, 4);
+
+							try {
+								fs.writeFileSync(path.join(".", "genesisBlock.json"), genesisBlockJson, "utf8");
+							} catch (e) {
+								return console.log(err);
+							}
+
+							console.log("Updating config");
+							var config = null;
+							try {
+								config = JSON.parse(fs.readFileSync(path.join(".", "config.json"), "utf8"));
+							} catch (e) {
+								return console.log(e);
+							}
+
+							config.forging = config.forging || {};
+							config.forging.secret = delegates.map(function (d) {
+								return d.secret;
+							});
+
+							fs.writeFile(path.join(".", "config.json"), JSON.stringify(config, null, 2), function (err) {
+								if (err) {
+									console.log(err);
+								} else {
+									console.log("Done");
+								}
+							});
+						});
+					}
+				});
+			} else {
 			console.log("'node crypto -h' to get help");
 		}
 	});

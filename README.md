@@ -56,6 +56,12 @@ shift-cli crypto -p
 shift-cli crypto -g
 ```
 
+### Generate new genesis block
+
+```
+shift-cli crypto -b
+```
+
 ### Help
 
 ```

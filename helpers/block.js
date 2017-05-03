@@ -70,7 +70,7 @@ module.exports = {
 		// fund recipient account
 		var balanceTransaction = {
 			type: 0,
-			amount: 10000000000000000,
+			amount: 1009000000000000,
 			fee: 0,
 			timestamp: 0,
 			recipientId: genesisAccount.address,
@@ -143,26 +143,29 @@ module.exports = {
 		transactions.push(voteTransaction);
 
 		//make dapps
-		var dappTransaction = {
-			type: 5,
-			amount: 0,
-			fee: 0,
-			timestamp: 0,
-			recipientId: null,
-			senderId: genesisAccount.address,
-			senderPublicKey: genesisAccount.keypair.publicKey,
-			asset: {
-				dapp: dapp
-			}
-		};
+		var dappTransaction = null;
+		if (dapp) {
 
-		bytes = transactionsLib.getTransactionBytes(dappTransaction);
-		dappTransaction.signature = cryptoLib.sign(genesisAccount.keypair, bytes);
-		bytes = transactionsLib.getTransactionBytes(dappTransaction);
-		dappTransaction.id = cryptoLib.getId(bytes);
+			dappTransaction = {
+				type: 5,
+				amount: 0,
+				fee: 0,
+				timestamp: 0,
+				recipientId: null,
+				senderId: genesisAccount.address,
+				senderPublicKey: genesisAccount.keypair.publicKey,
+				asset: {
+					dapp: dapp
+				}
+			};
 
-		transactions.push(dappTransaction);
+			bytes = transactionsLib.getTransactionBytes(dappTransaction);
+			dappTransaction.signature = cryptoLib.sign(genesisAccount.keypair, bytes);
+			bytes = transactionsLib.getTransactionBytes(dappTransaction);
+			dappTransaction.id = cryptoLib.getId(bytes);
 
+			transactions.push(dappTransaction);
+		}
 
 		transactions = transactions.sort(function compare(a, b) {
 			if (a.type == 1) return 1;
